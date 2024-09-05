@@ -1,7 +1,6 @@
 package personal_finance_tracker.persoal_finance_tracker.controllers;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import personal_finance_tracker.persoal_finance_tracker.dto.UserRegistrationDTO;
 import personal_finance_tracker.persoal_finance_tracker.services.UserService;
@@ -18,7 +17,6 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDTO userDTO) {
-        logger.info("Received registration request for user: {}", userDTO.getUsername());
         userService.registerNewUser(userDTO);
         return ResponseEntity.ok("User registered successfully");
     }
