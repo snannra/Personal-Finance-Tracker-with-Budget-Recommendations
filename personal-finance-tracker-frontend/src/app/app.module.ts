@@ -1,10 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { RouterModule, Routes } from '@angular/router'; // Import RouterModule for routing
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 
-import { AppComponent } from './app.component'; // Main app component
-import { NavbarComponent } from './navbar/navbar.component'; // Add your components
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routes';
+import { NavbarComponent } from './navbar/navbar.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ExpenseFormComponent } from './expense-form/expense-form.component';
@@ -14,8 +15,8 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'expenses/add', component: ExpenseFormComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Default route
-  { path: '**', redirectTo: '/login' } // Wildcard route
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({
@@ -30,8 +31,9 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
-    FormsModule, 
-    RouterModule.forRoot(routes) 
+    FormsModule,
+    AppRoutingModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -6,17 +6,25 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
+
+  private apiUrl = 'http://localhost:8080/api/auth'; // Your API endpoint
 
   constructor(private http: HttpClient) { }
 
-  // User registration
-  register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+  login(credentials: { username: string; password: string }): Observable<any> {
+    console.log('Sending login request to API with credentials:', credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 
-  // User login
-  login(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, userData);
+  isLoggedIn(): boolean {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return !!localStorage.getItem('authToken');
+  }
+
+  register(user: { username: string; email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, user);
   }
 }

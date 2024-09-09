@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';  // Import FormsModule for ngModel
+import { CommonModule } from '@angular/common';  // Import CommonModule for common directives like ngIf, ngFor
 import { ExpenseService } from '../services/expense/expense.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-expense-form',
+  standalone: true,
+  imports: [CommonModule, FormsModule],  // Add FormsModule here for ngModel
   templateUrl: './expense-form.component.html',
   styleUrls: ['./expense-form.component.css']
 })

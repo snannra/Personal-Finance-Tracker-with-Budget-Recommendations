@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';  // Import FormsModule for ngModel
+import { CommonModule } from '@angular/common';  // Import CommonModule for common directives like ngIf, ngFor
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule],  // Add FormsModule and CommonModule here
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -20,13 +24,12 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
-        // After successful login, redirect the user
-        this.router.navigate(['/dashboard']);
+        localStorage.setItem('authToken', response.token);
+        this.router.navigate(['/dashboard']);  // Redirect to dashboard after login
       },
       error: (error) => {
-        console.error('Login failed', error);
-        this.errorMessage = 'Invalid username or password';
+        console.error('Login failed, error response:', error); // Log error response
+        this.errorMessage = error.error?.error || 'Invalid username or password';
       }
     });
   }
