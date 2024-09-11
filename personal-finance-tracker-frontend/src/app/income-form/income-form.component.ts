@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IncomeService } from '../services/income/income.service';
+import { Router } from '@angular/router'; // Import Router for navigation
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,13 +17,21 @@ export class IncomeFormComponent {
     incomeDate: ''
   };
 
-  constructor(private incomeService: IncomeService) {}
+  constructor(
+    private incomeService: IncomeService,
+    private router: Router // Inject Router for navigation
+  ) {}
 
   onSubmit() {
-    this.incomeService.createIncome(this.income).subscribe(response => {
-      console.log('Income added successfully', response);
-    }, error => {
-      console.error('Error adding income', error);
+    console.log('Income data being sent:', this.income);
+    this.incomeService.createIncome(this.income).subscribe({
+      next: (response) => {
+        console.log('Income added successfully', response);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        console.error('Error adding income', error);
+      }
     });
   }
 }

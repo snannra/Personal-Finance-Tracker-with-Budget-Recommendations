@@ -7,25 +7,25 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        logger.info("Configuring security settings");
-
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for now
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing, but enable in production
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                        .anyRequest().authenticated() // Protect all other routes
-                );
+                        .requestMatchers("/api/auth/**", "/api/income", "/api/expense").permitAll() // Allow open access
+                                                                                                    // for testing
+                        .anyRequest().authenticated() // Ensure all other routes require authentication
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // If using JWT
+                .httpBasic(withDefaults()); // Or any other authentication method you're using
 
         return http.build();
     }

@@ -66,7 +66,7 @@ export class ExpenseFormComponent implements OnInit {
     this.expenseService.createExpense(this.expenseData).subscribe({
       next: (response) => {
         console.log('Expense added', response);
-        this.router.navigate(['/expenses']);  // Redirect to expenses list
+        this.router.navigate(['/dashboard']);  // Redirect to dashboard after adding
       },
       error: (error) => {
         console.error('Failed to add expense', error);
@@ -81,7 +81,7 @@ export class ExpenseFormComponent implements OnInit {
       this.expenseService.updateExpense(this.expenseId, this.expenseData).subscribe({
         next: (response) => {
           console.log('Expense updated', response);
-          this.router.navigate(['/expenses']);  // Redirect to expenses list
+          this.router.navigate(['/dashboard']);  // Redirect to dashboard after updating
         },
         error: (error) => {
           console.error('Failed to update expense', error);

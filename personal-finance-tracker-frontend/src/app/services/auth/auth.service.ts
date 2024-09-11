@@ -11,10 +11,10 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(credentials: { username: string; password: string }): Observable<any> {
-    console.log('Sending login request to API with credentials:', credentials);
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+  login(credentials: { username: string; password: string }): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials);
   }
+  
 
   isLoggedIn(): boolean {
     if (typeof window === 'undefined') {

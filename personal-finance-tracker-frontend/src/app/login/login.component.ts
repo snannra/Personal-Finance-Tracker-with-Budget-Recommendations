@@ -24,12 +24,12 @@ export class LoginComponent {
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
-        localStorage.setItem('authToken', response.token);
-        this.router.navigate(['/dashboard']);  // Redirect to dashboard after login
+        localStorage.setItem('token', response.token);
+        console.log('Login successful and token stored!');
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
-        console.error('Login failed, error response:', error); // Log error response
-        this.errorMessage = error.error?.error || 'Invalid username or password';
+        console.error('Login failed', error);
       }
     });
   }
