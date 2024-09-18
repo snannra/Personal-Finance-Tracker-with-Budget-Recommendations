@@ -3,6 +3,7 @@ import { Chart } from 'chart.js/auto';  // Import Chart.js with auto-register fu
 import { CommonModule } from '@angular/common';
 import { IncomeService } from '../services/income/income.service';
 import { ExpenseService } from '../services/expense/expense.service';
+import 'chartjs-adapter-date-fns';
 import { Router } from '@angular/router';
 
 @Component({
@@ -58,8 +59,11 @@ export class DashboardComponent implements OnInit {
       this.incomeChart.destroy(); // Destroy the old chart if exists
     }
 
-    const labels = this.incomeList.map((income) => income.incomeDate);
-    const data = this.incomeList.map((income) => income.amount);
+    const labels = this.incomeList.map((incomeData) => incomeData.date);
+    const data = this.incomeList.map((incomeData) => incomeData.amount);
+
+    const minDate = Math.min(...labels);
+    const maxDate = Math.max(...labels);  
 
     this.incomeChart = new Chart('incomeChart', {
       type: 'line', // or any other type like 'bar'
@@ -76,7 +80,12 @@ export class DashboardComponent implements OnInit {
       options: {
         scales: {
           x: {
-            type: 'category',  // Register the 'category' scale here
+            type: 'time',  // Register the 'category' scale here
+            time: {
+              unit: 'month'
+            },
+            min: minDate,
+            max: maxDate,
             title: {
               display: true,
               text: 'Date'
@@ -99,8 +108,8 @@ export class DashboardComponent implements OnInit {
       this.expenseChart.destroy(); // Destroy the old chart if exists
     }
 
-    const labels = this.expenseList.map((expense) => expense.expenseDate);
-    const data = this.expenseList.map((expense) => expense.amount);
+    const labels = this.expenseList.map((expenseData) => expenseData.date);
+    const data = this.expenseList.map((expenseData) => expenseData.amount);
 
     this.expenseChart = new Chart('expenseChart', {
       type: 'line', // or any other type like 'bar'

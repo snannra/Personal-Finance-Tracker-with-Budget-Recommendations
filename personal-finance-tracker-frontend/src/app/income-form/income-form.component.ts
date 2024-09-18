@@ -11,10 +11,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './income-form.component.html'
 })
 export class IncomeFormComponent {
-  income = {
+  incomeData = {
     amount: 0,
     description: '',
-    incomeDate: ''
+    date: ''
   };
 
   constructor(
@@ -23,8 +23,14 @@ export class IncomeFormComponent {
   ) {}
 
   onSubmit() {
-    console.log('Income data being sent:', this.income);
-    this.incomeService.createIncome(this.income).subscribe({
+
+    const incomeToSend = {
+      ...this.incomeData,
+      incomeDate: this.incomeData.date ? new Date(this.incomeData.date).toISOString().split('T')[0] : null
+    };
+
+    console.log('Income data being sent:', this.incomeData);
+    this.incomeService.createIncome(incomeToSend).subscribe({
       next: (response) => {
         console.log('Income added successfully', response);
         this.router.navigate(['/dashboard']);
