@@ -1,11 +1,14 @@
 package personal_finance_tracker.persoal_finance_tracker.controllers;
 
 import personal_finance_tracker.persoal_finance_tracker.entities.Income;
+import personal_finance_tracker.persoal_finance_tracker.entities.User;
 import personal_finance_tracker.persoal_finance_tracker.services.IncomeService;
+import personal_finance_tracker.persoal_finance_tracker.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,21 +19,21 @@ public class IncomeController {
     @Autowired
     private IncomeService incomeService;
 
-    @GetMapping
-    public List<Income> getAllIncomes() {
-        return incomeService.getAllIncomes();
-    }
+    @Autowired
+    private UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Income> getIncomeById(@PathVariable Long id) {
-        Optional<Income> income = incomeService.getIncomeById(id);
-        return income.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping
+    public List<Income> getUserIncome(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return incomeService.getIncomeByUser(user);
     }
 
     @PostMapping
-    public Income createIncome(@RequestBody Income income) {
-        return incomeService.createIncome(income);
+    public Income createIncome(@RequestBody Income income, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        income.setUser(user);
+        Income savedIncome = incomeService.saveIncome(income);
+        return ResponseEntity.ok(savedIncome);
     }
 
     @PutMapping("/{id}")

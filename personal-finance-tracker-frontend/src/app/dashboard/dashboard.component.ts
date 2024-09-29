@@ -62,9 +62,6 @@ export class DashboardComponent implements OnInit {
     const labels = this.incomeList.map((incomeData) => incomeData.date);
     const data = this.incomeList.map((incomeData) => incomeData.amount);
 
-    const minDate = Math.min(...labels);
-    const maxDate = Math.max(...labels);  
-
     this.incomeChart = new Chart('incomeChart', {
       type: 'line', // or any other type like 'bar'
       data: {
@@ -80,16 +77,11 @@ export class DashboardComponent implements OnInit {
       options: {
         scales: {
           x: {
-            type: 'time',  // Register the 'category' scale here
-            time: {
-              unit: 'month'
-            },
-            min: minDate,
-            max: maxDate,
+            type: 'category',  // Register the 'category' scale here
             title: {
               display: true,
               text: 'Date'
-            }
+            },
           },
           y: {
             title: {

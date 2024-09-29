@@ -28,12 +28,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Expense> expenses;
 
-    @OneToMany(mappedBy = "user")
-    private List<Savings> savings;
-
-    @OneToMany(mappedBy = "user")
-    private List<BudgetHistory> budgetHistories;
-
     public Long getId() {
         return id;
     }
@@ -88,22 +82,6 @@ public class User {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
-    }
-
-    public List<Savings> getSavings() {
-        return savings;
-    }
-
-    public void setSavings(List<Savings> savings) {
-        this.savings = savings;
-    }
-
-    public List<BudgetHistory> getBudgetHistories() {
-        return budgetHistories;
-    }
-
-    public void setBudgetHistories(List<BudgetHistory> budgetHistories) {
-        this.budgetHistories = budgetHistories;
     }
 
 }

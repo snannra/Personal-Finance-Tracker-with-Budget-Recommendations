@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,28 +10,36 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) { }
 
-  // Get all expenses
-  getAllExpenses(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 
-  // Get a single expense by ID
+
+  // Get all expenses for the logged-in user
+  getAllExpenses(): Observable<any> {
+    return this.http.get(this.apiUrl, { headers: this.getAuthHeaders() });
+  }
+
   getExpenseById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
   // Create a new expense
   createExpense(expenseData: any): Observable<any> {
-    return this.http.post(this.apiUrl, expenseData);
+    return this.http.post(this.apiUrl, expenseData, { headers: this.getAuthHeaders() });
   }
 
-  // Update an existing expense by ID
+  // Update an existing expense
   updateExpense(id: number, expenseData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, expenseData);
+    return this.http.put(`${this.apiUrl}/${id}`, expenseData, { headers: this.getAuthHeaders() });
   }
 
-  // Delete an expense by ID
+  // Delete an expense
   deleteExpense(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 }

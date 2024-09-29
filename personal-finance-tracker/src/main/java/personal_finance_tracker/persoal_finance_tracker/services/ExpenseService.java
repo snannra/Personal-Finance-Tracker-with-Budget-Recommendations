@@ -1,6 +1,7 @@
 package personal_finance_tracker.persoal_finance_tracker.services;
 
 import personal_finance_tracker.persoal_finance_tracker.entities.Expense;
+import personal_finance_tracker.persoal_finance_tracker.entities.User;
 import personal_finance_tracker.persoal_finance_tracker.repositories.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,15 @@ public class ExpenseService {
     @Autowired
     private ExpenseRepository expenseRepository;
 
-    public List<Expense> getAllExpenses() {
-        return expenseRepository.findAll();
+    public List<Expense> getExpensesByUser(User user) {
+        return expenseRepository.findByUser(user);
     }
 
     public Optional<Expense> getExpenseById(Long id) {
         return expenseRepository.findById(id);
     }
 
-    public Expense createExpense(Expense expense) {
+    public Expense saveExpense(Expense expense) {
         return expenseRepository.save(expense);
     }
 

@@ -28,7 +28,7 @@ export class ExpenseFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {}
-
+  
   ngOnInit(): void {
     // Check if we are editing an existing expense
     this.expenseId = this.route.snapshot.params['id'];

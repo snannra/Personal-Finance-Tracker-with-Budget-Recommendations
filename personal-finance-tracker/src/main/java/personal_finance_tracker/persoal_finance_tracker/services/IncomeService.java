@@ -1,12 +1,12 @@
 package personal_finance_tracker.persoal_finance_tracker.services;
 
 import personal_finance_tracker.persoal_finance_tracker.entities.Income;
+import personal_finance_tracker.persoal_finance_tracker.entities.User;
 import personal_finance_tracker.persoal_finance_tracker.repositories.IncomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class IncomeService {
@@ -14,15 +14,11 @@ public class IncomeService {
     @Autowired
     private IncomeRepository incomeRepository;
 
-    public List<Income> getAllIncomes() {
-        return incomeRepository.findAll();
+    public List<Income> getIncomeByUser(User user) {
+        return incomeRepository.findByUser(user);
     }
 
-    public Optional<Income> getIncomeById(Long id) {
-        return incomeRepository.findById(id);
-    }
-
-    public Income createIncome(Income income) {
+    public Income saveIncome(Income income) {
         return incomeRepository.save(income);
     }
 
