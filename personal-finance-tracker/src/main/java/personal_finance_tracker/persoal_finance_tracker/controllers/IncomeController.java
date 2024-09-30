@@ -23,14 +23,27 @@ public class IncomeController {
     private UserService userService;
 
     @GetMapping
-    public List<Income> getUserIncome(Principal principal) {
-        User user = userService.findByUsername(principal.getName());
-        return incomeService.getIncomeByUser(user);
+    public ResponseEntity<List<Income>> getUserIncome(Principal principal) {
+        Optional<User> userOptional = userService.findByUsername(principal.getName());
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = userOptional.get();
+        List<Income> incomeList = incomeService.getIncomeByUser(user);
+        return ResponseEntity.ok(incomeList);
     }
 
     @PostMapping
-    public Income createIncome(@RequestBody Income income, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+    public ResponseEntity<Income> createIncome(@RequestBody Income income, Principal principal) {
+        Optional<User> userOptional = userService.findByUsername(principal.getName());
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = userOptional.get();
         income.setUser(user);
         Income savedIncome = incomeService.saveIncome(income);
         return ResponseEntity.ok(savedIncome);
@@ -39,7 +52,8 @@ public class IncomeController {
     @PutMapping("/{id}")
     public ResponseEntity<Income> updateIncome(@PathVariable Long id, @RequestBody Income income) {
         try {
-            return ResponseEntity.ok(incomeService.updateIncome(id, income));
+            Income updatedIncome = incomeService.updateIncome(id, income);
+            return ResponseEntity.ok(updatedIncome);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

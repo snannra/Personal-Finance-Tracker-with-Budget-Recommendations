@@ -19,10 +19,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for testing, but enable in production
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/**", "/api/income", "/api/expense").permitAll() // Allow open access
-                                                                                                    // for testing
-                        .anyRequest().authenticated() // Ensure all other routes require authentication
-                )
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/income/**", "/api/expense/**").authenticated()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // If using JWT
                 .httpBasic(withDefaults()); // Or any other authentication method you're using
@@ -39,7 +38,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration); // Apply CORS settings for the API routes
+        source.registerCorsConfiguration("/**", configuration); // Apply CORS settings for the API routes
         return source;
     }
 }
